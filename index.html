@@ -25,131 +25,130 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
-    /* 모바일 기기 감싸기 (데스크톱 뷰용 데코레이션, 모바일에서는 꽉 참) */
-    @media (min-width: 640px) {
-      .phone-frame {
-        max-width: 420px;
-        height: 840px;
-        border: 10px solid #1e293b;
-        border-radius: 40px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-        position: relative;
-        overflow: hidden;
-      }
+    /* 가로 1080px, 세로 1920px 고정형 뷰포트 시뮬레이션 프레임 */
+    .phone-frame {
+      position: relative;
+      width: 1080px;
+      height: 1920px;
+      display: flex;
+      flex-direction: column;
+      background-color: #f8fafc; /* bg-slate-50 */
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
     }
   </style>
 </head>
-<body class="bg-slate-900 sm:py-8 flex items-center justify-center min-h-screen">
+<body class="bg-slate-900 flex items-center justify-center min-h-screen py-10">
 
   <!-- 메인 모바일 프레임 컨테이너 -->
-  <div class="phone-frame w-full min-h-screen sm:min-h-[820px] bg-slate-50 flex flex-col text-slate-800 transition-all duration-300">
+  <div class="phone-frame text-slate-800 transition-all duration-300">
     
-    <!-- 앱 상단 헤더 -->
-    <header class="bg-emerald-900 text-white px-5 pt-6 pb-5 rounded-b-[2rem] shadow-lg sticky top-0 z-40">
-      <div class="flex items-center justify-between mb-3">
-        <div class="flex items-center gap-2">
-          <div class="bg-emerald-500/20 p-2 rounded-xl text-emerald-400">
-            <i class="fa-solid fa-wallet text-lg"></i>
+    <!-- 앱 상단 헤더 (1080px 스케일에 맞춰 대폭 확장된 패딩 및 글자 크기) -->
+    <header class="bg-emerald-900 text-white px-10 pt-12 pb-10 rounded-b-[4rem] shadow-lg sticky top-0 z-40">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-4">
+          <div class="bg-emerald-500/20 p-4 rounded-[1.5rem] text-emerald-400">
+            <i class="fa-solid fa-wallet text-3xl"></i>
           </div>
           <div>
-            <span class="text-xs text-emerald-300 block">다오클 에코 지갑</span>
-            <span class="text-lg font-extrabold tracking-tight">다오클 <span class="text-emerald-400 text-sm">지갑</span></span>
+            <span class="text-lg text-emerald-300 block">다오클 에코 지갑</span>
+            <span class="text-3xl font-extrabold tracking-tight">다오클 <span class="text-emerald-400 text-2xl">지갑</span></span>
           </div>
         </div>
         <!-- 탄소 상시 단가 표시기 -->
-        <div class="bg-emerald-950/50 px-3 py-1.5 rounded-full border border-emerald-700/50 flex items-center gap-1.5">
-          <span class="text-[10px] text-emerald-300">시세 1t :</span>
-          <span class="text-xs font-bold text-emerald-400">₩25,000</span>
+        <div class="bg-emerald-950/50 px-6 py-3 rounded-full border border-emerald-700/50 flex items-center gap-3">
+          <span class="text-sm text-emerald-300">시세 1t :</span>
+          <span class="text-lg font-bold text-emerald-400">₩25,000</span>
         </div>
       </div>
       
       <!-- 총 자산 (실시간 누적액수 대형 카드) -->
-      <div class="mt-4 pt-1">
-        <span class="text-xs text-emerald-200 block font-medium">지금까지 모은 탄소머니</span>
-        <div class="flex items-baseline gap-1 mt-1">
-          <span id="header-total-cash" class="text-4xl font-black tracking-tight text-white">0</span>
-          <span class="text-lg font-bold text-emerald-300">원</span>
+      <div class="mt-8 pt-2">
+        <span class="text-base text-emerald-200 block font-medium">지금까지 모은 탄소머니</span>
+        <div class="flex items-baseline gap-2 mt-2">
+          <span id="header-total-cash" class="text-7xl font-black tracking-tight text-white">0</span>
+          <span class="text-3xl font-bold text-emerald-300">원</span>
         </div>
-        <div class="flex items-center justify-between mt-3 text-xs text-emerald-100/80 bg-emerald-950/40 p-2.5 rounded-xl border border-emerald-800/30">
-          <span>누적 배출권: <strong id="header-total-credits" class="font-extrabold text-white">0.0000</strong> tCO₂</span>
+        <div class="flex items-center justify-between mt-6 text-sm text-emerald-100/80 bg-emerald-950/40 p-4 rounded-2xl border border-emerald-800/30">
+          <span>누적 배출권: <strong id="header-total-credits" class="font-extrabold text-white text-base">0.0000</strong> tCO₂</span>
           <span class="text-emerald-400 font-bold"><i class="fa-solid fa-tree mr-1"></i>소나무 <span id="header-total-trees">0.0</span>그루 효과</span>
         </div>
       </div>
     </header>
 
-    <!-- 메인 스크롤 콘텐츠 영역 -->
-    <main class="flex-grow overflow-y-auto px-4 py-5 pb-24 no-scrollbar">
+    <!-- 메인 스크롤 콘텐츠 영역 (1080px 고정 규격에서 부드럽게 스크롤) -->
+    <main class="flex-grow overflow-y-auto px-8 py-8 pb-32 no-scrollbar">
 
       <!-- ==================== TAB 1: HOME (대시보드 & 퀵로그) ==================== -->
-      <div id="tab-home" class="tab-content space-y-5">
+      <div id="tab-home" class="tab-content space-y-8">
         
         <!-- 실시간 저감 상태 카드 -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">내 주행 효율 상태</h3>
-          <div id="home-vehicle-summary" class="space-y-3">
+        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
+          <h3 class="text-base font-bold text-slate-400 uppercase tracking-wider mb-5">내 주행 효율 상태</h3>
+          <div id="home-vehicle-summary" class="space-y-4">
             <!-- 차량 간편 정보 노출 -->
           </div>
         </div>
 
         <!-- ⚡ 원탭 퀵 가동 일지 적립 카드 -->
-        <div class="bg-gradient-to-br from-emerald-800 to-emerald-950 text-white p-5 rounded-3xl shadow-md relative overflow-hidden">
-          <div class="absolute -right-6 -bottom-6 text-white/5 text-9xl pointer-events-none">
+        <div class="bg-gradient-to-br from-emerald-800 to-emerald-950 text-white p-10 rounded-[2.5rem] shadow-md relative overflow-hidden">
+          <div class="absolute -right-6 -bottom-6 text-white/5 text-[12rem] pointer-events-none">
             <i class="fa-solid fa-bolt"></i>
           </div>
           
-          <div class="flex items-center gap-2 mb-3">
-            <span class="bg-emerald-500/20 text-emerald-400 p-1.5 rounded-lg text-xs"><i class="fa-solid fa-truck-fast"></i></span>
-            <h4 class="font-bold text-base">간편 운행일지 적립</h4>
+          <div class="flex items-center gap-3 mb-5">
+            <span class="bg-emerald-500/20 text-emerald-400 p-3 rounded-xl text-lg"><i class="fa-solid fa-truck-fast"></i></span>
+            <h4 class="font-bold text-xl">간편 운행일지 적립</h4>
           </div>
           
-          <p class="text-xs text-emerald-200 mb-4">오늘 주행한 시간을 기록하면 탄소 크레딧이 실시간 입금됩니다.</p>
+          <p class="text-sm text-emerald-200 mb-6">오늘 주행한 시간을 기록하면 탄소 크레딧이 실시간 입금됩니다.</p>
           
-          <form id="quick-log-form" onsubmit="handleQuickLog(event)" class="space-y-4">
+          <form id="quick-log-form" onsubmit="handleQuickLog(event)" class="space-y-6">
             <div>
-              <label class="block text-[11px] font-bold text-emerald-300 mb-1.5">운행 차량 선택</label>
-              <select id="quick-vehicle" class="w-full bg-emerald-900/60 border border-emerald-700/50 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400" required>
+              <label class="block text-xs font-bold text-emerald-300 mb-2">운행 차량 선택</label>
+              <select id="quick-vehicle" class="w-full bg-emerald-900/60 border border-emerald-700/50 rounded-xl px-5 py-3.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400" required>
                 <!-- JS 동적 주입 -->
               </select>
             </div>
 
             <div>
-              <div class="flex justify-between text-[11px] font-bold text-emerald-300 mb-1">
+              <div class="flex justify-between text-xs font-bold text-emerald-300 mb-2">
                 <span>오늘의 가동 시간</span>
-                <span id="quick-hours-val" class="text-emerald-400 font-extrabold text-sm">4시간</span>
+                <span id="quick-hours-val" class="text-emerald-400 font-extrabold text-base">4시간</span>
               </div>
               <!-- 모바일 터치 슬라이더 -->
               <input type="range" id="quick-hours" min="0.5" max="15" step="0.5" value="4" class="w-full accent-emerald-400 h-2 bg-emerald-900 rounded-lg appearance-none cursor-pointer">
-              <div class="flex justify-between text-[9px] text-emerald-400 mt-1">
+              <div class="flex justify-between text-[11px] text-emerald-400 mt-2">
                 <span>0.5시간</span>
                 <span>15시간</span>
               </div>
             </div>
 
             <!-- 실시간 기대값 미리보기 -->
-            <div id="quick-preview" class="bg-emerald-950/60 p-3 rounded-xl border border-emerald-800/40 flex justify-between items-center text-xs">
+            <div id="quick-preview" class="bg-emerald-950/60 p-5 rounded-2xl border border-emerald-800/40 flex justify-between items-center text-sm">
               <div>
-                <span class="text-emerald-300 block text-[10px]">예상 적립 탄소</span>
+                <span class="text-emerald-300 block text-[11px]">예상 적립 탄소</span>
                 <span id="quick-preview-credit" class="font-bold text-white">0.0000 t</span>
               </div>
               <div class="text-right">
-                <span class="text-[10px] text-emerald-400 block">머니 환전액</span>
-                <span id="quick-preview-cash" class="font-black text-emerald-400 text-sm">+0원</span>
+                <span class="text-[11px] text-emerald-400 block">머니 환전액</span>
+                <span id="quick-preview-cash" class="font-black text-emerald-400 text-lg">+0원</span>
               </div>
             </div>
 
-            <button type="submit" class="w-full py-3 bg-emerald-400 hover:bg-emerald-500 text-slate-900 font-extrabold rounded-xl text-sm transition-all shadow-md active:scale-[0.98]">
+            <button type="submit" class="w-full py-4 bg-emerald-400 hover:bg-emerald-500 text-slate-900 font-extrabold rounded-2xl text-sm transition-all shadow-md active:scale-[0.98]">
               <i class="fa-solid fa-leaf mr-1"></i> 지금 바로 탄소머니 적립하기
             </button>
           </form>
         </div>
 
         <!-- 미니 누적 추이 차트 -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="font-bold text-slate-800 text-sm">탄소 머니 획득 곡선</h4>
-            <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded text-slate-500 font-medium">최근 누적</span>
+        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="font-bold text-slate-800 text-base">탄소 머니 획득 곡선</h4>
+            <span class="text-xs bg-slate-100 px-3 py-1 rounded text-slate-500 font-medium">최근 누적</span>
           </div>
-          <div class="h-36 flex items-center justify-center">
+          <div class="h-64 flex items-center justify-center">
             <canvas id="miniCumulativeChart"></canvas>
           </div>
         </div>
@@ -158,56 +157,56 @@
 
 
       <!-- ==================== TAB 2: TEST (검사결과 입력 및 설정) ==================== -->
-      <div id="tab-test" class="tab-content hidden space-y-4">
+      <div id="tab-test" class="tab-content hidden space-y-6">
         
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-          <h3 class="font-bold text-slate-900 text-base mb-1">차종별 정기검사 수치 변경</h3>
-          <p class="text-xs text-slate-400">나만의 차량을 새로 등록하거나, 엔진오일 첨가제 도포 전과 후의 검사 결과값(NOx)을 입력하여 배출 표준 등급을 갱신합니다.</p>
+        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
+          <h3 class="font-bold text-slate-900 text-xl mb-2">차종별 정기검사 수치 변경</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">나만의 차량을 새로 등록하거나, 엔진오일 첨가제 도포 전과 후의 검사 결과값(NOx)을 입력하여 배출 표준 등급을 갱신합니다.</p>
         </div>
 
         <!-- 모바일 차종 스위처 (세로로 깔끔하게 아래로 정렬된 터치 목록) -->
-        <div class="flex flex-col gap-2 py-1" id="vehicle-tabs-container">
+        <div class="flex flex-col gap-3 py-2" id="vehicle-tabs-container">
           <!-- JS 동적 생성 영역: 세로로 쌓인 [기본 1톤], [기본 25톤], [추가된 내 차량들...] 및 [+ 내 차 등록] -->
         </div>
 
         <!-- 설정 상세 폼 카드 -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 space-y-6">
           <div class="flex justify-between items-center">
-            <span id="form-selected-badge" class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-extrabold rounded-md">내 차량 제원</span>
-            <span class="text-slate-400 text-xs"><i class="fa-solid fa-truck-ramp-box"></i></span>
+            <span id="form-selected-badge" class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-extrabold rounded-md">내 차량 제원</span>
+            <span class="text-slate-400 text-base"><i class="fa-solid fa-truck-ramp-box"></i></span>
           </div>
 
           <!-- 차량 이름/모델명 입력 필드 -->
           <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1">차량 이름 / 모델명</label>
-            <input type="text" id="calc-name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="예: 내 포터 2" oninput="liveUpdateCalculations()">
+            <label class="block text-xs font-bold text-slate-400 mb-2">차량 이름 / 모델명</label>
+            <input type="text" id="calc-name" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="예: 내 포터 2" oninput="liveUpdateCalculations()">
           </div>
 
           <!-- 출력 및 기준 수치 -->
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-[10px] font-bold text-slate-400 mb-1">엔진 출력 (마력)</label>
-              <div class="relative rounded-lg shadow-sm">
-                <input type="number" id="calc-hp" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none" oninput="liveUpdateCalculations()">
-                <span class="absolute right-2 top-2 text-[9px] text-slate-400">HP</span>
+              <label class="block text-xs font-bold text-slate-400 mb-2">엔진 출력 (마력)</label>
+              <div class="relative rounded-xl shadow-sm">
+                <input type="number" id="calc-hp" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none" oninput="liveUpdateCalculations()">
+                <span class="absolute right-3 top-3 text-xs text-slate-400">HP</span>
               </div>
             </div>
             <div>
-              <label class="block text-[10px] font-bold text-slate-400 mb-1">에너지율 환산</label>
-              <div class="bg-slate-100 border border-slate-200 text-slate-600 rounded-lg px-2.5 py-1.5 text-xs font-bold">
+              <label class="block text-xs font-bold text-slate-400 mb-2">에너지율 환산</label>
+              <div class="bg-slate-100 border border-slate-200 text-slate-600 rounded-xl px-4 py-3 text-sm font-bold">
                 <span id="calc-kw">0</span> kW
               </div>
             </div>
           </div>
 
           <!-- NOx 배출 수치 전/후 슬라이드 및 수량 수치 -->
-          <div class="space-y-3 bg-slate-50 p-3 rounded-xl border border-slate-200/50">
-            <h4 class="text-xs font-bold text-slate-700 flex items-center gap-1">
+          <div class="space-y-4 bg-slate-50 p-6 rounded-2xl border border-slate-200/50">
+            <h4 class="text-sm font-bold text-slate-700 flex items-center gap-2">
               <i class="fa-solid fa-smog text-emerald-600"></i> 질소산화물 배출계수 (g/kWh)
             </h4>
             
             <div>
-              <div class="flex justify-between text-[11px] font-medium text-slate-500 mb-1">
+              <div class="flex justify-between text-xs font-medium text-slate-500 mb-2">
                 <span>① 첨가제 주입 전 (Baseline)</span>
                 <span id="lbl-nox-before" class="font-bold text-slate-800">2.10</span>
               </div>
@@ -215,7 +214,7 @@
             </div>
 
             <div>
-              <div class="flex justify-between text-[11px] font-medium text-slate-500 mb-1">
+              <div class="flex justify-between text-xs font-medium text-slate-500 mb-2">
                 <span>② 첨가제 주입 후 (검사 실측치)</span>
                 <span id="lbl-nox-after" class="font-bold text-emerald-600">1.50</span>
               </div>
@@ -224,40 +223,40 @@
           </div>
 
           <!-- 동적 실시간 등급 미리보기 -->
-          <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-xl space-y-2">
-            <div class="flex justify-between items-center text-xs">
+          <div class="bg-emerald-50 border border-emerald-100 p-5 rounded-2xl space-y-3">
+            <div class="flex justify-between items-center text-sm">
               <span class="text-slate-500">종합 배출가스 저감율</span>
-              <strong id="calc-reduction-rate" class="text-emerald-700 font-extrabold text-sm">28.6% 감축</strong>
+              <strong id="calc-reduction-rate" class="text-emerald-700 font-extrabold text-base">28.6% 감축</strong>
             </div>
-            <div class="flex justify-between items-center text-xs">
+            <div class="flex justify-between items-center text-sm">
               <span class="text-slate-500">시간 가동당 탄소 감축량</span>
               <strong id="calc-savings-per-hour" class="text-emerald-700 font-extrabold">12.90 kg CO₂/h</strong>
             </div>
           </div>
 
           <!-- 액션 버튼 영역 -->
-          <div class="flex gap-2">
-            <button id="btn-delete-vehicle" onclick="deleteVehicle()" class="flex-1 py-3 bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold rounded-xl text-xs transition-all hidden">
+          <div class="flex gap-3">
+            <button id="btn-delete-vehicle" onclick="deleteVehicle()" class="flex-1 py-4 bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold rounded-xl text-xs transition-all hidden">
               <i class="fa-solid fa-trash-can mr-1"></i> 차량 삭제
             </button>
-            <button onclick="saveVehicleTestSettings()" class="flex-[2] py-3 bg-slate-800 text-white hover:bg-slate-900 font-bold rounded-xl text-xs shadow-sm transition-all">
+            <button onclick="saveVehicleTestSettings()" class="flex-[2] py-4 bg-slate-800 text-white hover:bg-slate-900 font-bold rounded-xl text-xs shadow-sm transition-all">
               <i class="fa-solid fa-circle-check mr-1"></i> 차량 정보 저장
             </button>
           </div>
         </div>
 
         <!-- 💾 기기간 데이터 백업 및 가져오기 -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
-          <h4 class="text-xs font-bold text-slate-800"><i class="fa-solid fa-arrows-rotate text-emerald-600 mr-1"></i> 기기 간 데이터 백업 & 동기화</h4>
-          <p class="text-[11px] text-slate-400">다른 스마트폰이나 컴퓨터에서 이 파일을 열었을 때, 아래 백업 코드를 복사해서 붙여넣으면 기존 기록이 그대로 복원됩니다.</p>
+        <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 space-y-4">
+          <h4 class="text-sm font-bold text-slate-800"><i class="fa-solid fa-arrows-rotate text-emerald-600 mr-1"></i> 기기 간 데이터 백업 & 동기화</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">다른 스마트폰이나 컴퓨터에서 이 파일을 열었을 때, 아래 백업 코드를 복사해서 붙여넣으면 기존 기록이 그대로 복원됩니다.</p>
           
-          <div class="space-y-2">
-            <button onclick="generateBackupCode()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
+          <div class="space-y-3">
+            <button onclick="generateBackupCode()" class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
               <i class="fa-solid fa-copy mr-1"></i> 내 백업 코드 복사하기
             </button>
             <div class="flex gap-2">
-              <input type="text" id="restore-input" placeholder="여기에 백업 코드를 붙여넣으세요" class="flex-grow bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none">
-              <button onclick="restoreFromCode()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs whitespace-nowrap transition-all">
+              <input type="text" id="restore-input" placeholder="여기에 백업 코드를 붙여넣으세요" class="flex-grow bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs focus:outline-none">
+              <button onclick="restoreFromCode()" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs whitespace-nowrap transition-all">
                 복원하기
               </button>
             </div>
@@ -265,12 +264,12 @@
         </div>
 
         <!-- 온난화 지수 원리 숨김 펼치기 -->
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
           <button onclick="toggleFaq()" class="w-full flex items-center justify-between text-xs text-slate-500 font-bold">
             <span><i class="fa-solid fa-scale-balanced mr-1"></i> 탄소 환산 가중치 규격 상세 정보</span>
             <i id="faq-chevron" class="fa-solid fa-chevron-down"></i>
           </button>
-          <div id="faq-content" class="hidden mt-3 pt-3 border-t border-slate-100 space-y-2 text-[11px] text-slate-500 leading-relaxed">
+          <div id="faq-content" class="hidden mt-4 pt-4 border-t border-slate-100 space-y-3 text-xs text-slate-500 leading-relaxed">
             <p>• <strong>출력 환산율:</strong> 1 마력(HP) = 0.75 kWh</p>
             <p>• <strong>N₂O 비중비:</strong> 배출 질소산화물 내 아산화질소 환산 비율은 <strong>0.8135</strong>를 따릅니다.</p>
             <p>• <strong>지구 온난화지수 (GWP):</strong> IPCC 제6차 보고서(AR6) 표준에 의거하여 아산화질소의 환경 가중치는 CO₂ 대비 <strong>265배</strong>를 적용합니다.</p>
@@ -281,22 +280,22 @@
 
 
       <!-- ==================== TAB 3: HISTORY (운행 내역 리스트) ==================== -->
-      <div id="tab-history" class="tab-content hidden space-y-4">
+      <div id="tab-history" class="tab-content hidden space-y-6">
         
         <div class="flex items-center justify-between">
-          <h3 class="font-bold text-slate-900 text-base">차량별 적립 타임라인</h3>
+          <h3 class="font-bold text-slate-900 text-lg">차량별 적립 타임라인</h3>
           <div class="flex gap-2">
-            <button onclick="exportToCSV()" class="p-1.5 px-3 bg-emerald-100 text-emerald-800 rounded-lg text-[10px] font-bold flex items-center gap-1">
+            <button onclick="exportToCSV()" class="p-2 px-4 bg-emerald-100 text-emerald-800 rounded-xl text-xs font-bold flex items-center gap-1.5">
               <i class="fa-solid fa-file-excel"></i> 엑셀저장
             </button>
-            <button onclick="clearAllLogs()" class="p-1.5 bg-rose-50 text-rose-600 rounded-lg text-[10px] font-bold">
+            <button onclick="clearAllLogs()" class="p-2 bg-rose-50 text-rose-600 rounded-xl text-xs font-bold">
               전체 비우기
             </button>
           </div>
         </div>
 
         <!-- 타임라인 카드 컨테이너 -->
-        <div id="history-timeline" class="space-y-3">
+        <div id="history-timeline" class="space-y-4">
           <!-- 동적 타임라인 리스트 주입 -->
         </div>
 
@@ -304,19 +303,19 @@
 
     </main>
 
-    <!-- 앱 네비게이션 하단 바 (iOS / Android 스타일) -->
-    <nav class="bg-white border-t border-slate-200/80 absolute bottom-0 left-0 right-0 h-16 flex items-center justify-around z-50 rounded-t-2xl shadow-xl">
-      <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center justify-center gap-1 text-emerald-600 w-20">
+    <!-- 앱 네비게이션 하단 바 (고정된 10% 축소형 h-14 레이아웃) -->
+    <nav class="bg-white border-t border-slate-200/80 absolute bottom-0 left-0 right-0 h-14 flex items-center justify-around z-50 rounded-t-[1.5rem] shadow-xl">
+      <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center justify-center gap-0.5 text-emerald-600 w-24">
         <i class="fa-solid fa-house text-lg"></i>
         <span class="text-[10px] font-bold">대시보드</span>
       </button>
       
-      <button onclick="switchTab('test')" id="nav-test" class="nav-btn flex flex-col items-center justify-center gap-1 text-slate-400 w-20">
+      <button onclick="switchTab('test')" id="nav-test" class="nav-btn flex flex-col items-center justify-center gap-0.5 text-slate-400 w-24">
         <i class="fa-solid fa-square-poll-vertical text-lg"></i>
         <span class="text-[10px] font-bold">테스트/검사</span>
       </button>
       
-      <button onclick="switchTab('history')" id="nav-history" class="nav-btn flex flex-col items-center justify-center gap-1 text-slate-400 w-20">
+      <button onclick="switchTab('history')" id="nav-history" class="nav-btn flex flex-col items-center justify-center gap-0.5 text-slate-400 w-24">
         <i class="fa-solid fa-clock-rotate-left text-lg"></i>
         <span class="text-[10px] font-bold">적립내역</span>
       </button>
@@ -325,7 +324,7 @@
   </div>
 
   <!-- 토스트 알림 메시지 -->
-  <div id="app-toast" class="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-slate-950 text-white text-xs px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none z-50">
+  <div id="app-toast" class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-slate-950 text-white text-xs px-6 py-3.5 rounded-full shadow-2xl flex items-center gap-3 transition-all duration-300 opacity-0 pointer-events-none z-50">
     <i class="fa-solid fa-check-circle text-emerald-400"></i>
     <span id="toast-msg">처리 완료</span>
   </div>
@@ -438,9 +437,9 @@
 
       // 내비 버튼 스타일 교체
       document.querySelectorAll(".nav-btn").forEach(btn => {
-        btn.className = "nav-btn flex flex-col items-center justify-center gap-1 text-slate-400 w-20";
+        btn.className = "nav-btn flex flex-col items-center justify-center gap-0.5 text-slate-400 w-24";
       });
-      document.getElementById(`nav-${tabId}`).className = "nav-btn flex flex-col items-center justify-center gap-1 text-emerald-600 w-20";
+      document.getElementById(`nav-${tabId}`).className = "nav-btn flex flex-col items-center justify-center gap-0.5 text-emerald-600 w-24";
 
       if (tabId === 'home') {
         setTimeout(initMiniChart, 100);
@@ -464,7 +463,7 @@
         btn.onclick = () => selectVehicleForCalc(v.id);
         
         // 세로 정렬에 특화된 풀 위드(w-full) 디자인 클래스
-        btn.className = `w-full px-4 py-3.5 rounded-xl text-xs font-bold text-left transition-all shadow-sm border flex items-center justify-between ${
+        btn.className = `w-full px-6 py-4.5 rounded-2xl text-sm font-bold text-left transition-all shadow-sm border flex items-center justify-between ${
           isActive 
             ? "bg-emerald-600 text-white border-emerald-600 font-extrabold" 
             : "bg-white text-slate-700 border-slate-200/80 hover:bg-slate-50"
@@ -472,11 +471,11 @@
         
         // 활성화된 차량 옆에 체크아이콘 추가
         btn.innerHTML = `
-          <span class="flex items-center gap-2">
-            <i class="fa-solid fa-truck text-[12px] ${isActive ? 'text-white' : 'text-emerald-600'}"></i>
+          <span class="flex items-center gap-3">
+            <i class="fa-solid fa-truck text-base ${isActive ? 'text-white' : 'text-emerald-600'}"></i>
             <span>${v.name}</span>
           </span>
-          ${isActive ? '<i class="fa-solid fa-circle-check text-white text-sm"></i>' : ''}
+          ${isActive ? '<i class="fa-solid fa-circle-check text-white text-xl"></i>' : ''}
         `;
         container.appendChild(btn);
       });
@@ -485,8 +484,8 @@
       const addBtn = document.createElement("button");
       addBtn.type = "button";
       addBtn.onclick = () => addNewVehicle();
-      addBtn.className = "w-full py-3.5 mt-1 rounded-xl text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-dashed border-emerald-300 hover:bg-emerald-100 flex items-center justify-center gap-2 shadow-sm transition-all active:scale-[0.99]";
-      addBtn.innerHTML = `<i class="fa-solid fa-plus text-[12px]"></i> 새 차량 등록하기`;
+      addBtn.className = "w-full py-4 mt-2 rounded-2xl text-sm font-extrabold bg-emerald-50 text-emerald-700 border border-dashed border-emerald-300 hover:bg-emerald-100 flex items-center justify-center gap-3 shadow-sm transition-all active:scale-[0.99]";
+      addBtn.innerHTML = `<i class="fa-solid fa-plus text-base"></i> 새 차량 등록하기`;
       container.appendChild(addBtn);
     }
 
@@ -644,18 +643,18 @@
         
         // 홈 대시보드 카드 구성
         const vCard = document.createElement("div");
-        vCard.className = "p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between";
+        vCard.className = "p-5 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-between";
         vCard.innerHTML = `
-          <div class="flex items-center gap-3">
-            <span class="text-xl text-emerald-600"><i class="fa-solid fa-truck"></i></span>
+          <div class="flex items-center gap-4">
+            <span class="text-3xl text-emerald-600"><i class="fa-solid fa-truck"></i></span>
             <div>
-              <span class="font-bold text-xs text-slate-800 block leading-tight">${v.name}</span>
-              <span class="text-[10px] text-slate-400">마력: ${v.hp}HP | 저감률: ${result.ratePercent}%</span>
+              <span class="font-bold text-base text-slate-800 block leading-tight">${v.name}</span>
+              <span class="text-xs text-slate-400">마력: ${v.hp}HP | 저감률: ${result.ratePercent}%</span>
             </div>
           </div>
           <div class="text-right">
-            <span class="text-xs font-black text-emerald-700 block">${result.savingsKgPerHour.toFixed(3)}kg/h</span>
-            <span class="text-[9px] text-slate-400">시간당 저감력</span>
+            <span class="text-base font-black text-emerald-700 block">${result.savingsKgPerHour.toFixed(3)}kg/h</span>
+            <span class="text-xs text-slate-400">시간당 저감력</span>
           </div>
         `;
         summaryContainer.appendChild(vCard);
@@ -679,9 +678,9 @@
 
       if (sorted.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-10 bg-white rounded-2xl border border-slate-100">
-            <i class="fa-solid fa-folder-open text-4xl text-slate-200 mb-2"></i>
-            <p class="text-xs text-slate-400">아직 적립된 주행 기록이 없습니다.</p>
+          <div class="text-center py-20 bg-white rounded-[2rem] border border-slate-100">
+            <i class="fa-solid fa-folder-open text-6xl text-slate-200 mb-4"></i>
+            <p class="text-sm text-slate-400">아직 적립된 주행 기록이 없습니다.</p>
           </div>
         `;
         return;
@@ -695,27 +694,27 @@
         const cash = credits * carbonPrice;
 
         const card = document.createElement("div");
-        card.className = "bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between";
+        card.className = "bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center justify-between";
         card.innerHTML = `
-          <div class="flex gap-3">
-            <div class="bg-emerald-50 text-emerald-700 px-2 rounded-xl flex flex-col justify-center items-center h-12 w-12 text-center">
-              <span class="text-[9px] font-bold block leading-none">CO₂</span>
-              <span class="text-xs font-black mt-0.5">${co2Savings.toFixed(1)}</span>
-              <span class="text-[8px] opacity-80 leading-none">kg</span>
+          <div class="flex gap-4">
+            <div class="bg-emerald-50 text-emerald-700 px-3 rounded-2xl flex flex-col justify-center items-center h-16 w-16 text-center">
+              <span class="text-[10px] font-bold block leading-none">CO₂</span>
+              <span class="text-sm font-black mt-1">${co2Savings.toFixed(1)}</span>
+              <span class="text-[9px] opacity-80 leading-none">kg</span>
             </div>
             <div>
-              <div class="flex items-center gap-1.5">
-                <span class="font-extrabold text-xs text-slate-900">${v.name}</span>
-                <span class="text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded-md">${log.hours}h 운행</span>
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-sm text-slate-900">${v.name}</span>
+                <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md">${log.hours}h 운행</span>
               </div>
-              <span class="text-[10px] text-slate-400 block mt-0.5">${log.memo || '일반 운행'}</span>
-              <span class="text-[9px] text-slate-500 font-medium block mt-1">${log.date}</span>
+              <span class="text-xs text-slate-400 block mt-1">${log.memo || '일반 운행'}</span>
+              <span class="text-[11px] text-slate-500 font-medium block mt-1.5">${log.date}</span>
             </div>
           </div>
           <div class="text-right">
-            <span class="text-emerald-700 font-black text-sm block">+${Math.round(cash).toLocaleString()}원</span>
-            <span class="text-[9px] text-slate-400 block mt-0.5">${credits.toFixed(5)} tCO₂</span>
-            <button onclick="deleteLog('${log.id}')" class="text-rose-400 hover:text-rose-600 text-xs font-semibold mt-1">삭제</button>
+            <span class="text-emerald-700 font-black text-base block">+${Math.round(cash).toLocaleString()}원</span>
+            <span class="text-xs text-slate-400 block mt-1">${credits.toFixed(5)} tCO₂</span>
+            <button onclick="deleteLog('${log.id}')" class="text-rose-400 hover:text-rose-600 text-xs font-semibold mt-1.5">삭제</button>
           </div>
         `;
         container.appendChild(card);
